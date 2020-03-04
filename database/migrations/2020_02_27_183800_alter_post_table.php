@@ -14,7 +14,7 @@ class AlterPostTable extends Migration
     public function up()
     {
         Schema::table('post', function (Blueprint $table) {
-            $table->dateTime('closed_at');
+            $table->dateTime('closed_at')->nullable();
         });
     }
 
