@@ -44,7 +44,7 @@ class ProfileController extends Controller
         if($user->is_tutor){
             $tutor = Tutor::findOrFail($user->tutor_id);
         }
-        return view('auth\profile', ['user' => $user, 'tutor'  => $tutor, 'user_attributes' => $user_attributes, 'tutor_attributes' => $tutor_attributes]);
+        return view('auth/profile', ['user' => $user, 'tutor'  => $tutor, 'user_attributes' => $user_attributes, 'tutor_attributes' => $tutor_attributes]);
     }
 
     public function modify(Request $request, $id){
@@ -70,7 +70,7 @@ class ProfileController extends Controller
         $user = Auth::user();
         if($id == $user->id){
             $request->file('file')->storeAs(
-                'public\avatars', $filename
+                'public/avatars', $filename
             );
             $avatar_url = asset('storage/avatars/' . $filename);
             $user->avatar = $avatar_url;

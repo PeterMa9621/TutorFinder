@@ -46,7 +46,7 @@ class MyPostController extends Controller
     public function index()
     {
         $posts = $this->postService->getMyPostsWithInfo($this->limit, $this->offset);
-        return view('posts\my_posts', ['posts'=>$posts]);
+        return view('posts/my_posts', ['posts'=>$posts]);
     }
 
 }

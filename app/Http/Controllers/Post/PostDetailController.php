@@ -31,13 +31,13 @@ class PostDetailController extends Controller
     public function detail($id)
     {
         $detail = $this->postService->getPostDetail($id);
-        return view('posts\post_detail', ['post' => $detail[0], 'course' => $detail[1], 'tutoring_content' => $detail[2], 'poster' => $detail[3]]);
+        return view('posts/post_detail', ['post' => $detail[0], 'course' => $detail[1], 'tutoring_content' => $detail[2], 'poster' => $detail[3]]);
     }
 
     public function contact($id){
         if($this->canGetContact()){
             $detail = $this->postService->getPostDetail($id);
-            return view('posts\post_detail', ['post' => $detail[0], 'course' => $detail[1], 'tutoring_content' => $detail[2], 'poster' => $detail[3], 'show_contact' => true]);
+            return view('posts/post_detail', ['post' => $detail[0], 'course' => $detail[1], 'tutoring_content' => $detail[2], 'poster' => $detail[3], 'show_contact' => true]);
         } else {
             return response("You don't have permission to view this person's contact information!", 200);
         }
@@ -50,7 +50,7 @@ class PostDetailController extends Controller
     public function edit(Request $request, $id){
         if($request->isMethod('get')){
             $post = $this->postService->get($id);
-            return view('posts\edit_post', ['courses'=>Course::all(), 'tutoring_contents'=>TutoringContent::all(), 'post'=>$post]);
+            return view('posts/edit_post', ['courses'=>Course::all(), 'tutoring_contents'=>TutoringContent::all(), 'post'=>$post]);
         } elseif($request->isMethod('post')) {
             $post = $this->postService->update($request->all(), $id);
             return redirect(route('post_detail', ['id' => $post->id]));
@@ -59,7 +59,7 @@ class PostDetailController extends Controller
 
     public function delete($id){
         $this->postService->delete($id);
-        return view('notification\success', ['content'=>'Delete a post successfully!']);
+        return view('notification/success', ['content'=>'Delete a post successfully!']);
     }
 
     public function close($id){

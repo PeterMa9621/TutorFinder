@@ -32,7 +32,7 @@ class CreatePostController extends Controller
      */
     public function index()
     {
-        return view('posts\create_post', ['courses'=>Course::all(), 'tutoring_contents'=>TutoringContent::all()]);
+        return view('posts/create_post', ['courses'=>Course::all(), 'tutoring_contents'=>TutoringContent::all()]);
     }
 
     /**

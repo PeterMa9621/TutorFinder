@@ -32,6 +32,6 @@ class TutorController extends Controller
             ->where('id', '!=', Auth::id())
             ->get();
 
-        return view('tutors\index', ['tutors' => $tutors]);
+        return view('tutors/index', ['tutors' => $tutors]);
     }
 }
