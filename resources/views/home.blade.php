@@ -7,6 +7,10 @@
             <div class="card">
                 <div class="card-header">Recent Posts</div>
 
+                <home-page-list-view></home-page-list-view>
+
+
+                <!--
                 @if(sizeof($posts)==0)
                     <div class="card-body">No posts</div>
                 @else
@@ -26,18 +30,11 @@
                         @endforeach
                     </div>
                 @endif
+                -->
             </div>
         </div>
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('.list-group-item').hover(function () {
-            $(this).addClass('active');
-        }, function () {
-            $(this).removeClass('active');
-        });
-    });
-</script>
+
 @endsection
