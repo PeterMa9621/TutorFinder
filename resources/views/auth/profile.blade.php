@@ -36,7 +36,7 @@
                                 </div>
                             </div>
                         </div>
-
+                        @if(isset($tutor))
                         <!-- Tutor Part -->
                         <div class="">
                             <div class="card">
@@ -57,12 +57,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <script>
-                            $("input").on('change', function () {
-                                $('.card-footer').removeClass('invisible');
-                            });
-                        </script>
+                        @endif
                     </div>
             @if($user->id == Auth::id())
                     <div class="card-footer" id="modify">
@@ -137,6 +132,7 @@
         });
 
         // Used to get all courses that the user can tutor
+        @if(isset($tutor))
         $.ajax({
             url: '{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}',
             type: 'GET',
@@ -152,7 +148,8 @@
             error: function (errorMessage) {
                 alert(errorMessage);
             }
-        })
+        });
+        @endif
     });
 
 </script>

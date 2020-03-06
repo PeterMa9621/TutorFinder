@@ -24,10 +24,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <script>
         $(document).ready(function () {
-            $('.nav-link').hover(function () {
-                $(this).addClass('active');
+            $('.dropleft').hover(function () {
+                $(this).addClass('show');
+                $('.dropdown-menu').addClass('show');
             }, function () {
-                $(this).removeClass('active');
+                $(this).removeClass('show');
+                $('.dropdown-menu').removeClass('show');
             });
         });
     </script>
@@ -68,8 +70,9 @@
                             <a class="nav-link" href="{{ route('my_post') }}">{{ __('My Posts') }}</a>
                         </li>
                         @endif
-                        <li class="nav-item dropleft">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li id="profile" class="nav-item dropleft">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            onclick="$('#profile').addClass('show')">
                                 {{ Auth::user()->name }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -94,6 +97,7 @@
         <main class="py-4">
             @yield('content')
         </main>
+
     </div>
 </body>
 </html>
