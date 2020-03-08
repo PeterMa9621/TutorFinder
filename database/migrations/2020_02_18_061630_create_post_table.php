@@ -20,11 +20,11 @@ class CreatePostTable extends Migration
             $table->bigIncrements('id');
             $table->timestamps();
             $table->integer('poster');
-            $table->string('tutoring_content');
+            $table->unsignedBigInteger('tutoring_content');
             $table->dateTime('when');
-            $table->integer('course');
-            $table->foreign('course')->references('id')->on('course');
-            $table->foreign('tutoring_content')->references('id')->on('tutoring_content');
+            $table->unsignedBigInteger('course');
+            $table->foreign('course')->references('id')->on('course')->onDelete('cascade');
+            $table->foreign('tutoring_content')->references('id')->on('tutoring_content')->onDelete('cascade');
         });
     }
 

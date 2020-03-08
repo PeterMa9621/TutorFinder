@@ -15,8 +15,8 @@ class AlterUsersTable1 extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('avatar')->nullable();
-            $table->integer('tutor_id')->nullable();
-            $table->foreign('tutor_id')->references('id')->on('tutor');
+            $table->unsignedBigInteger('tutor_id')->nullable();
+            $table->foreign('tutor_id')->references('id')->on('tutor')->onDelete('cascade');
         });
     }
 

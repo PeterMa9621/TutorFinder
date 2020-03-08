@@ -14,10 +14,10 @@ class CreateTutorCommentTable extends Migration
     public function up()
     {
         Schema::create('tutor_comment', function (Blueprint $table) {
-            $table->integer('tutor_id');
-            $table->integer('content');
+            $table->unsignedBigInteger('tutor_id');
+            $table->string('content');
             $table->float('score');
-            $table->foreign('tutor_id')->references('id')->on('tutor');
+            $table->foreign('tutor_id')->references('id')->on('tutor')->onDelete('cascade');
         });
     }
 

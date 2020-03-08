@@ -42,19 +42,34 @@
                             <div class="card">
                                 <div class="card-header">Tutor Profile</div>
                                 <div class="card-body">
-                                    <div class="container-fluid">
-                                        @foreach($tutor_attributes as $display_name => $column_name)
-                                            <div class="row mt-2">
-                                                <div class="col-3">
-                                                    <label for="{{ __($column_name) }}" class="mt-2">{{ __($display_name) }}</label>
-                                                </div>
-                                                <div class="col-9">
-                                                    <input id="{{ __($column_name) }}" name="{{ __($column_name) }}" class="form-control" {{ $tutor->user_id == Auth::id() ? '' : 'disabled' }}>
+                                    <template id="can-tutor-course-list" :courses="courses">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                Courses can be tutoring
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="list-group">
+                                                    <a v-for="course in courses" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                                                        <div class="container-fluid">
+                                                            <div class="row">
+                                                                <div class="col-2">
+                                                                    <img src="{{ asset('img/default-tutor-icon.jpg') }}" alt="" width="100%">
+                                                                </div>
+                                                                <div class="col-10">
+                                                                    <div class="d-flex w-100 justify-content-between">
+                                                                        <h5 class="mb-1">[[ course.code ]]</h5>
+                                                                    </div>
+                                                                    <p class="mb-1">[[ course.name ]]</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
-                                        @endforeach
-                                    </div>
+                                        </div>
+                                    </template>
                                 </div>
+
                             </div>
                         </div>
                         @endif
@@ -133,20 +148,33 @@
 
         // Used to get all courses that the user can tutor
         @if(isset($tutor))
-        $.ajax({
-            url: '{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}',
-            type: 'GET',
-            success: function (data) {
-                console.log(data);
-                data.forEach(function (value, index, array) {
-                    let course = value['code'] + ' - ' + value['name'] + ' ';
-                    $('#can_tutor').val(function () {
-                        return this.value + course;
-                    })
-                })
+
+        var component = {
+            props: ['courses'],
+            template: '#can-tutor-course-list'
+        };
+
+        var app = new Vue({
+            el: '#app',
+            delimiters: ['[[', ']]'],
+            data() {
+                return {
+                    courses: []
+                }
             },
-            error: function (errorMessage) {
-                alert(errorMessage);
+            components: {
+                'can-tutor-course-list': component
+            },
+            methods: {
+                get() {
+                    window.axios.get("{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}").then((response) => {
+                        const data = response.data;
+                        data.forEach(course => {this.courses.push(course)});
+                    });
+                }
+            },
+            created(){
+                this.get();
             }
         });
         @endif

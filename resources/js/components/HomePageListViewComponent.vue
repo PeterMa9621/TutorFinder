@@ -43,7 +43,7 @@
         },
         methods: {
             get() {
-                window.axios.get('/api/post/list/-1').then((response) => {
+                window.axios.get('/api/post/list/0').then((response) => {
                     const data = response.data;
                     data.forEach(post => this.posts.push(new Post(post)));
                 });

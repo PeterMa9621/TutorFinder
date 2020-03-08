@@ -64,26 +64,28 @@ class PostService
 
     public function getMyPostsWithInfo($limit, $offset){
         $query = '
-            SELECT p.id, p.created_at, p.updated_at, p."when", (c.code || " - " || c.name) as course, t.content as tutoring_content, u.name as username, p.closed_at IS NOT NULL as is_closed
+            SELECT p.id, p.created_at, p.updated_at, p.when, CONCAT(c.code, " - ", c.name) as course, t.content as tutoring_content, u.name as username, p.closed_at IS NOT NULL as is_closed
             FROM post p, course c, tutoring_content t, users u
             WHERE p.course = c.id AND p.tutoring_content = t.id AND p.poster = u.id AND u.id = ?
             ORDER BY p.created_at DESC
             LIMIT ?
             OFFSET ?;';
+
         $posts = DB::select($query, [Auth::id(), $limit, $offset]);
+
         return $posts;
     }
 
     public function getPostsWithInfo($limit, $offset){
         $query = '
-            SELECT p.id, p.created_at, p.updated_at, p."when", (c.code || " - " || c.name) as course, t.content as tutoring_content, u.name as username 
+            SELECT p.id, p.created_at, p.updated_at, p.when, CONCAT(c.code, " - ", c.name) as course, t.content as tutoring_content, u.name as username 
             FROM post p, course c, tutoring_content t, users u
-            WHERE p.course = c.id AND p.tutoring_content = t.id AND p.poster = u.id AND p."when" >= datetime(CURRENT_TIMESTAMP,"localtime") AND p.closed_at IS NULL
+            WHERE p.course = c.id AND p.tutoring_content = t.id AND p.poster = u.id AND p.when >= convert_tz(now(),@@session.time_zone, "-06:00") AND p.closed_at IS NULL
             ORDER BY p.created_at DESC
             LIMIT ?
             OFFSET ?;';
         $posts = DB::select($query, [$limit, $offset]);
-
-        return $posts;
+        $result = ['count' => sizeof($posts), 'data' => $posts];
+        return $result;
     }
 }

@@ -16,7 +16,7 @@ class HomeController extends Controller
     protected $courses = [];
     protected $tutoring_content = [];
     protected $limit = 10;
-    protected $offset = -1;
+    protected $offset = 0;
     /**
      * Create a new controller instance.
      *
@@ -39,7 +39,7 @@ class HomeController extends Controller
      */
     public function index(Request $request, PostService $postService)
     {
-        $posts = $postService->getPostsWithInfo($this->limit, $this->offset);
-        return view('home', ['posts' => $posts]);
+        #$posts = $postService->getPostsWithInfo($this->limit, $this->offset);
+        return view('home');
     }
 }

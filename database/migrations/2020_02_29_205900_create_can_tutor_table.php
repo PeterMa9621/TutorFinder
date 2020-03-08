@@ -14,10 +14,10 @@ class CreateCanTutorTable extends Migration
     public function up()
     {
         Schema::create('can_tutor', function (Blueprint $table) {
-            $table->integer('tutor_id');
-            $table->integer('course');
-            $table->foreign('course')->references('id')->on('course');
-            $table->foreign('tutor_id')->references('id')->on('tutor');
+            $table->unsignedBigInteger('tutor_id');
+            $table->unsignedBigInteger('course');
+            $table->foreign('course')->references('id')->on('course')->onDelete('cascade');
+            $table->foreign('tutor_id')->references('id')->on('tutor')->onDelete('cascade');
         });
     }
 

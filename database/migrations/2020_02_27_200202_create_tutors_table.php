@@ -15,10 +15,10 @@ class CreateTutorsTable extends Migration
     {
         Schema::create('tutor', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id');
-            $table->integer('can_tutor')->nullable();
-            $table->integer('comment')->nullable();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('can_tutor')->nullable();
+            $table->unsignedBigInteger('comment')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

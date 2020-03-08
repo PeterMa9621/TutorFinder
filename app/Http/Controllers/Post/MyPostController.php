@@ -34,7 +34,7 @@ class MyPostController extends Controller
     {
         $this->middleware('auth');
         $this->limit = 10;
-        $this->offset = -1;
+        $this->offset = 0;
         $this->postService = $postService;
     }
 
