@@ -16,13 +16,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/home');
 
-
-Route::get('/login', function (){
-    return view('login');
-})->name('login');
-
-Route::view('/test', 'login', ['name' => 'Taylor']);
-
 Route::get('/posts/my', 'Post\MyPostController@index')->name('my_post');
 
 Route::get('/posts/create', 'Post\CreatePostController@index');
