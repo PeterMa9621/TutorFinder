@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Model\Tutor\CanTutor;
+use App\Model\Course;
+use App\Tutor;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class CanTutorController extends Controller
+class TutorController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +19,7 @@ class CanTutorController extends Controller
      */
     public function index()
     {
-        return response(CanTutor::all(), 200);
+        return response(Tutor::all(), 200);
     }
 
     /**
@@ -27,28 +30,25 @@ class CanTutorController extends Controller
      */
     public function store(Request $request)
     {
-        CanTutor::create([
-            'tutor_id' => $request->input('tutor_id'),
-            'course' => $request->input('course'),
-        ]);
-        return response('OK', 200);
+
+        return response('Not Implemented', 404);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $tutor_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($tutor_id)
     {
         $query = '
-            SELECT course.*
-            FROM can_tutor, course
-            WHERE can_tutor.course = course.id AND can_tutor.tutor_id = ?;';
-        $result = DB::select($query, [$id]);
+            SELECT u.id, u.name, u.email, u.is_tutor, u.wechat, u.facebook, u.avatar, t.id as tutor_id, t.can_tutor, t.comment
+            FROM users u, tutor t
+            WHERE u.id = t.user_id AND t.id = ?';
 
-        return response($result, 200);
+        $user = DB::select($query, [$tutor_id]);
+        return response($user, 200);
     }
 
     /**
@@ -60,6 +60,9 @@ class CanTutorController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $course = Course::findOrFail($id);
+        $course->fill($request->all());
+        $course->save();
         return response('OK', 200);
     }
 
@@ -71,6 +74,7 @@ class CanTutorController extends Controller
      */
     public function destroy($id)
     {
+        Course::findOrFail($id)->forceDelete();
         return response('OK', 200);
     }
 }

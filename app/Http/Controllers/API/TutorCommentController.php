@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Model\Tutor\CanTutor;
+use App\Model\Tutor\TutorComment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Response;
 
-class CanTutorController extends Controller
+class TutorCommentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,10 @@ class CanTutorController extends Controller
      */
     public function index()
     {
-        return response(CanTutor::all(), 200);
+        $list = [
+            'store' => 'ss'
+        ];
+        return json_encode($list);
     }
 
     /**
@@ -27,28 +30,25 @@ class CanTutorController extends Controller
      */
     public function store(Request $request)
     {
-        CanTutor::create([
+        $tutorComment = TutorComment::create([
             'tutor_id' => $request->input('tutor_id'),
-            'course' => $request->input('course'),
+            'content' => $request->input('content'),
+            'score' => $request->input('score'),
+            'user_id' => $request->input('user_id')
         ]);
-        return response('OK', 200);
+        return new Response($tutorComment, 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $tutor_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($tutor_id)
     {
-        $query = '
-            SELECT course.*
-            FROM can_tutor, course
-            WHERE can_tutor.course = course.id AND can_tutor.tutor_id = ?;';
-        $result = DB::select($query, [$id]);
-
-        return response($result, 200);
+        $tutor_comments = TutorComment::where('tutor_id', $tutor_id)->orderBy('created_at', 'desc')->get();
+        return new Response($tutor_comments, 200);
     }
 
     /**
@@ -60,7 +60,7 @@ class CanTutorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return response('OK', 200);
+        //
     }
 
     /**
@@ -71,6 +71,6 @@ class CanTutorController extends Controller
      */
     public function destroy($id)
     {
-        return response('OK', 200);
+        //
     }
 }

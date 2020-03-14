@@ -29,6 +29,12 @@ Vue.component('home-page-list-view', HomePageListViewComponent);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
+import CommentComponent from './components/CommentComponent';
+
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    delimiters: ['[[', ']]'],
+    components: {
+        'comment-component': CommentComponent
+    }
 });

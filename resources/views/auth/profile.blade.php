@@ -1,19 +1,22 @@
 @extends('layouts.app')
 
 @section('content')
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-4"></div>
-        <div class="col-sm-4">
+        <div class="col-xl-3 col-md-2"></div>
+        <div class="col-xl-6 col-md-8">
             @if($user->id == Auth::id())
             <form method="post" action="{{ Route('profile', ['id'=>Auth::id()]) }}">
                 @csrf
             @endif
-                <div class="card">
+                <div class="card" style="border: none">
                     <div class="card-img-top">
                         <button type="button" class="btn btn-outline-primary btn-sm" style="position: absolute; right: 100%" data-toggle="modal" data-target="#upload" onclick="$('#notification').text('');">Upload</button>
-                        <img id="avatar" src="{{ $user->avatar==null ? asset('img/default-user-icon.jpeg') : $user->avatar }}" alt="" width="100%">
+                        <div class="row justify-content-center">
+                            <img id="avatar" src="{{ $user->avatar==null ? asset('img/default-user-icon.jpeg') : $user->avatar }}" alt="" width="60%">
+                        </div>
+
                     </div>
                     <div class="card-body">
                         <!-- User Part -->
@@ -36,9 +39,10 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- User Part End -->
                         @if(isset($tutor))
                         <!-- Tutor Part -->
-                        <div class="">
+                        <div class="form-group">
                             <div class="card">
                                 <div class="card-header">Tutor Profile</div>
                                 <div class="card-body">
@@ -52,7 +56,7 @@
                                                     <a v-for="course in courses" href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                                                         <div class="container-fluid">
                                                             <div class="row">
-                                                                <div class="col-2">
+                                                                <div class="col-2 my-auto">
                                                                     <img src="{{ asset('img/default-tutor-icon.jpg') }}" alt="" width="100%">
                                                                 </div>
                                                                 <div class="col-10">
@@ -69,9 +73,37 @@
                                         </div>
                                     </template>
                                 </div>
-
                             </div>
                         </div>
+                        <!-- Tutor Part End -->
+
+                        <!-- Comment Part Only For Tutors -->
+                        <div class="">
+                            <template id="comment-component">
+                                <div class="card">
+                                    <div class="card-header">
+                                        Comments
+                                    </div>
+                                    <!-- Leave Comment Part -->
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="comment_box">Leave Comments:</label>
+                                            <textarea id="comment_box" class="form-control" rows="4" placeholder="Leave comments for this tutor..." v-model="new_comment"></textarea>
+                                            <div class="row justify-content-end">
+                                                <button class="btn btn-outline-primary mt-2 mr-3" @click="app.add_comment()">Submit</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Show Comments Below -->
+                                        <div>
+                                            <hr>
+                                            <comment-component></comment-component>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <!-- Comment Part End -->
                         @endif
                     </div>
             @if($user->id == Auth::id())
@@ -103,17 +135,17 @@
                                 <input id="upload" type="submit" class="btn btn-primary" value="Upload">
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4"></div>
+        <div class="col-xl-3 col-md-2"></div>
     </div>
 </div>
-<span id="test"></span>
+
 <script>
     $(document).ready(function () {
+        // Upload avatar
         $('#upload-form').on('submit', function (e) {
             e.preventDefault();
             $.ajax({
@@ -145,40 +177,85 @@
                 }
             });
         });
+    });
 
-        // Used to get all courses that the user can tutor
-        @if(isset($tutor))
+    // Vue.js Part Below
+    // Used to get all courses that the user can tutor
+    @if(isset($tutor))
 
-        var component = {
-            props: ['courses'],
-            template: '#can-tutor-course-list'
+    const comment_component = {
+            delimiters: ['[[', ']]'],
+            props: ['comments'],
+            template: '#comment-component'
         };
 
-        var app = new Vue({
-            el: '#app',
-            delimiters: ['[[', ']]'],
-            data() {
-                return {
-                    courses: []
-                }
-            },
-            components: {
-                'can-tutor-course-list': component
-            },
-            methods: {
-                get() {
-                    window.axios.get("{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}").then((response) => {
-                        const data = response.data;
-                        data.forEach(course => {this.courses.push(course)});
-                    });
-                }
-            },
-            created(){
-                this.get();
+    var component = {
+        props: ['courses'],
+        template: '#can-tutor-course-list'
+    };
+
+    var app = new Vue({
+        el: '#app',
+        delimiters: ['[[', ']]'],
+        data() {
+            return {
+                courses: [],
+                comments: [],
+                new_comment: undefined,
+                new_score: 5.0
             }
-        });
-        @endif
+        },
+        components: {
+            'can-tutor-course-list': component,
+            'comment-component': comment_component
+        },
+        methods: {
+            get_courses() {
+                window.axios.get("{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}").then((response) => {
+                    const data = response.data;
+                    data.forEach(course => {this.courses.push(course)});
+                });
+            },
+            get_comments() {
+                window.axios.get("{{ route('tutor_comment.show', ['tutor_comment'=>$tutor->id]) }}").then((response) => {
+                    const data = response.data;
+                    console.log(data);
+                    data.forEach(comment => {
+                        console.log("/api/user/" + comment.user_id);
+                        this.get_user_info(comment.user_id, (user_info) => {
+                            comment['user'] = user_info;
+                            this.comments.push(comment);
+                        });
+                    });
+                });
+            },
+            add_comment() {
+                window.axios.post("{{ route('tutor_comment.store') }}", {
+                    "tutor_id": "{{$tutor->id}}",
+                    "content": this.new_comment===undefined?"This user only leave star rating.":this.new_comment,
+                    "score": this.new_score,
+                    "user_id": "{{ Auth::id() }}"
+                }).then((response) => {
+                    this.get_user_info("{{ Auth::id() }}", (user_info) => {
+                        var comment = response.data;
+                        comment['user'] = user_info;
+                        this.comments.unshift(comment);
+                        this.new_comment = undefined;
+                    });
+                });
+            },
+            get_user_info(user_id, callback) {
+                window.axios.get("/api/user/" + user_id).then((response) => {
+                    callback(response.data);
+                });
+            }
+        },
+        created(){
+            this.get_courses();
+            this.get_comments();
+        }
     });
+    @endif
 
 </script>
 @endsection

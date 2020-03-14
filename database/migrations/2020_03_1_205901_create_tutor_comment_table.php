@@ -15,8 +15,10 @@ class CreateTutorCommentTable extends Migration
     {
         Schema::create('tutor_comment', function (Blueprint $table) {
             $table->unsignedBigInteger('tutor_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('content');
             $table->float('score');
+            $table->timestamps();
             $table->foreign('tutor_id')->references('id')->on('tutor')->onDelete('cascade');
         });
     }

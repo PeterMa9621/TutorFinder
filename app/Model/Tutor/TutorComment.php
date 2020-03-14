@@ -14,7 +14,7 @@ class TutorComment extends Model
      */
     protected $table = 'tutor_comment';
 
-    protected $primaryKey = null;
+    //protected $primaryKey = null;
 
     public $incrementing = false;
 
@@ -24,6 +24,6 @@ class TutorComment extends Model
      * @var array
      */
     protected $fillable = [
-        'tutor_id', 'content', 'score'
+        'tutor_id', 'user_id', 'content', 'score'
     ];
 }

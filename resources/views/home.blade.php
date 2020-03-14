@@ -37,8 +37,6 @@
     </div>
 </div>
 
-
-
 <script>
     function Post({id, created_at, updated_at, when, course, tutoring_content, username}) {
         this.id = id;
@@ -65,7 +63,7 @@
         data() {
             return {
                 offset: 0,
-                posts: []
+                posts: [],
             };
         },
         mounted() {

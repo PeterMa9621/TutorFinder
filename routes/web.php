@@ -49,7 +49,10 @@ Route::post('/profile/{id}/upload', 'Auth\ProfileController@upload')->name('prof
 Route::apiResources([
     'api/course' => 'API\CourseController',
     'api/cantutor' => 'API\CanTutorController',
-    'api/post' => 'API\PostController'
+    'api/post' => 'API\PostController',
+    'api/tutor_comment' => 'API\TutorCommentController',
+    'api/user' => 'API\UserController',
+    'api/tutor' => 'API\TutorController'
     ]);
 
 Route::get('api/post/list/{offset}', 'API\PostController@getPostsWithInfo');
