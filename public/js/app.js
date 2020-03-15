@@ -1925,6 +1925,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   delimiters: ['[[', ']]'],
+  props: ['tutor_id'],
   data: function data() {
     return {
       comments: []
@@ -1937,7 +1938,7 @@ __webpack_require__.r(__webpack_exports__);
     get_courses: function get_courses() {
       var _this = this;
 
-      window.axios.get("{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}").then(function (response) {
+      window.axios.get("/api/cantutor/" + this.tutor_id).then(function (response) {
         var data = response.data;
         data.forEach(function (course) {
           _this.courses.push(course);
@@ -1947,7 +1948,7 @@ __webpack_require__.r(__webpack_exports__);
     get_comments: function get_comments() {
       var _this2 = this;
 
-      window.axios.get("{{ route('tutor_comment.show', ['tutor_comment'=>$tutor->id]) }}").then(function (response) {
+      window.axios.get("/api/tutor_comment/" + this.tutor_id).then(function (response) {
         var data = response.data;
         console.log(data);
         data.forEach(function (comment) {
@@ -1987,7 +1988,8 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   created: function created() {
-    //this.get_courses();
+    console.log(this.tutor_id); //this.get_courses();
+
     this.get_comments();
   }
 });
@@ -2035,11 +2037,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      comment: []
-    };
-  }
+  delimiters: ['[[', ']]'],
+  props: ['comment']
 });
 
 /***/ }),
@@ -37570,7 +37569,11 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "col-10" }, [
-      _vm._m(1),
+      _c("div", { staticClass: "row justify-content-between" }, [
+        _c("h5", [_vm._v(_vm._s(_vm.comment.user.name))]),
+        _vm._v(" "),
+        _c("small", [_vm._v(_vm._s(_vm.comment.updated_at))])
+      ]),
       _vm._v(" "),
       _c("div", { staticClass: "row" }, [
         _c(
@@ -37594,9 +37597,11 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(2),
+      _c("div", { staticClass: "row" }, [
+        _c("p", [_vm._v(_vm._s(_vm.comment.content))])
+      ]),
       _vm._v(" "),
-      _vm._m(3)
+      _vm._m(1)
     ])
   ])
 }
@@ -37614,24 +37619,6 @@ var staticRenderFns = [
           width: "100%"
         }
       })
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row justify-content-between" }, [
-      _c("h5", [_vm._v("[[ comment.user.name ]]")]),
-      _vm._v(" "),
-      _c("small", [_vm._v("[[ comment.updated_at ]]")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "row" }, [
-      _c("p", [_vm._v("[[ comment.content ]]")])
     ])
   },
   function() {
@@ -49972,7 +49959,7 @@ Vue.component('home-page-list-view', _components_HomePageListViewComponent__WEBP
 
 
 var app = new Vue({
-  el: '#app',
+  el: '#profile',
   delimiters: ['[[', ']]'],
   components: {
     'comment-component': _components_CommentComponent__WEBPACK_IMPORTED_MODULE_2__["default"]

@@ -16,7 +16,7 @@ class TutorComment extends Model
 
     //protected $primaryKey = null;
 
-    public $incrementing = false;
+    //public $incrementing = false;
 
     /**
      * The attributes that are mass assignable.
@@ -24,6 +24,6 @@ class TutorComment extends Model
      * @var array
      */
     protected $fillable = [
-        'tutor_id', 'user_id', 'content', 'score'
+        'tutor_id', 'user_id', 'content', 'score', 'parent_comment'
     ];
 }

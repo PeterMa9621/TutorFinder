@@ -16,9 +16,10 @@
 
     export default {
         delimiters: ['[[', ']]'],
+        props: ['tutor_id'],
         data() {
             return {
-                comments: []
+                comments: [],
             }
         },
         components: {
@@ -26,13 +27,13 @@
         },
         methods: {
             get_courses() {
-                window.axios.get("{{ route('cantutor.show', ['cantutor'=>$tutor->id]) }}").then((response) => {
+                window.axios.get("/api/cantutor/" + this.tutor_id).then((response) => {
                     const data = response.data;
                     data.forEach(course => {this.courses.push(course)});
                 });
             },
             get_comments() {
-                window.axios.get("{{ route('tutor_comment.show', ['tutor_comment'=>$tutor->id]) }}").then((response) => {
+                window.axios.get("/api/tutor_comment/" + this.tutor_id).then((response) => {
                     const data = response.data;
                     console.log(data);
                     data.forEach(comment => {
@@ -66,6 +67,7 @@
             }
         },
         created(){
+            console.log(this.tutor_id);
             //this.get_courses();
             this.get_comments();
         }

@@ -5,8 +5,8 @@
         </div>
         <div class="col-10">
             <div class="row justify-content-between">
-                <h5>[[ comment.user.name ]]</h5>
-                <small>[[ comment.updated_at ]]</small>
+                <h5>{{ comment.user.name }}</h5>
+                <small>{{ comment.updated_at }}</small>
             </div>
             <div class="row">
                 <div class="form-inline">
@@ -19,7 +19,7 @@
                 </div>
             </div>
             <div class="row">
-                <p>[[ comment.content ]]</p>
+                <p>{{ comment.content }}</p>
             </div>
             <div class="row justify-content-between">
                 <div></div>
@@ -31,11 +31,8 @@
 
 <script>
     export default {
-        data() {
-            return {
-                comment: []
-            }
-        }
+        delimiters: ['[[', ']]'],
+        props: ['comment'],
     }
 </script>
 

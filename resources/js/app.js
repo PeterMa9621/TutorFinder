@@ -32,7 +32,7 @@ Vue.component('home-page-list-view', HomePageListViewComponent);
 import CommentComponent from './components/CommentComponent';
 
 const app = new Vue({
-    el: '#app',
+    el: '#profile',
     delimiters: ['[[', ']]'],
     components: {
         'comment-component': CommentComponent
